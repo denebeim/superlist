@@ -37,7 +37,7 @@ class NewVisitorTest(unittest.TestCase):
         # She visits that URL - her to-do list is still there.
 
         # Satisfied, she goes back to sleep
-
+        self.fail('Finish the test')
 
 if __name__ == 'main':
     unittest.main()
