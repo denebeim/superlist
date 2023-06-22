@@ -28,6 +28,7 @@ class NewListTest(TestCase):
 class ListViewTest(TestCase):
     def test_uses_list_template(self):
         list_ = List.objects.create()
+        Item.objects.create(text='itemey 1', list=list_)
         response = self.client.get(f'/lists/{list_.id}/')
         self.assertTemplateUsed(response, 'list.html')
 
