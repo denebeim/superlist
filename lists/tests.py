@@ -32,7 +32,7 @@ class ListViewTest(TestCase):
         response = self.client.get(f'/lists/{list_.id}/')
         self.assertTemplateUsed(response, 'list.html')
 
-    def test_displays_all_list_items_for_that_list(self):
+    def test_displays_only_list_items_for_that_list(self):
         correct_list = List.objects.create()
         Item.objects.create(text='itemey 1', list=correct_list)
         Item.objects.create(text='itemey 2', list=correct_list)
@@ -46,6 +46,41 @@ class ListViewTest(TestCase):
         self.assertContains(response, 'itemey 2')
         self.assertNotContains(response, 'Other list item 1')
         self.assertNotContains(response, 'Other list item 2')
+
+
+class NewItemTest(TestCase):
+    S = 'A new item to an existing list'
+
+    def test_can_save_a_POST_request_to_an_existing_list(self):
+        correct_list = List.objects.create()
+        # Item.objects.create(text='itemey 1', list=correct_list)
+        other_list = List.objects.create()
+
+        self.client.post(
+            f'/lists/{correct_list.id}/add_item',
+            data={'item_text': self.S},
+        )
+
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, self.S)
+        self.assertEqual(new_item.list, correct_list)
+
+    def test_redirects_to_list_view(self):
+        correct_list = List.objects.create()
+        Item.objects.create(text='itemey 1', list=correct_list)
+        Item.objects.create(text='itemey 2', list=correct_list)
+        other_list = List.objects.create()
+        Item.objects.create(text='Other list item 1', list=other_list)
+        Item.objects.create(text='Other list item 2', list=other_list)
+
+        response = self.client.post(
+            f'/lists/{correct_list.id}/add_item',
+            data={'item_text': self.S},
+        )
+        self.assertRedirects(response, f'/lists/{correct_list.id}/',
+                             fetch_redirect_response=False
+                             )
 
 
 class ListAndItemModelsTest(TestCase):
