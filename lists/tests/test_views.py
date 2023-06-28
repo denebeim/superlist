@@ -6,6 +6,34 @@ from lists.tests.test_models import _create_two_lists
 
 
 class ListViewTest(TestCase):
+    S = 'A new item to an existing list'
+
+    def test_can_save_a_POST_request_to_an_existing_list(self):
+        correct_list = List.objects.create()
+        # Item.objects.create(text='itemey 1', list=correct_list)
+        other_list = List.objects.create()
+
+        self.client.post(
+            f'/lists/{correct_list.id}/',
+            data={'item_text': self.S},
+        )
+
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, self.S)
+        self.assertEqual(new_item.list, correct_list)
+
+    def test_POST_redirects_to_list_view(self):
+        correct_list, other_list = _create_two_lists()
+
+        response = self.client.post(
+            f'/lists/{correct_list.id}/',
+            data={'item_text': self.S},
+        )
+        self.assertRedirects(response, f'/lists/{correct_list.id}/',
+                             fetch_redirect_response=False
+                             )
+
     def test_uses_list_template(self):
         list_ = List.objects.create()
         Item.objects.create(text='itemey 1', list=list_)

@@ -20,36 +20,6 @@ def _create_two_lists() -> object:
     return correct_list, other_list
 
 
-class NewItemTest(TestCase):
-    S = 'A new item to an existing list'
-
-    def test_can_save_a_POST_request_to_an_existing_list(self):
-        correct_list = List.objects.create()
-        # Item.objects.create(text='itemey 1', list=correct_list)
-        other_list = List.objects.create()
-
-        self.client.post(
-            f'/lists/{correct_list.id}/add_item',
-            data={'item_text': self.S},
-        )
-
-        self.assertEqual(Item.objects.count(), 1)
-        new_item = Item.objects.first()
-        self.assertEqual(new_item.text, self.S)
-        self.assertEqual(new_item.list, correct_list)
-
-    def test_redirects_to_list_view(self):
-        correct_list, other_list = _create_two_lists()
-
-        response = self.client.post(
-            f'/lists/{correct_list.id}/add_item',
-            data={'item_text': self.S},
-        )
-        self.assertRedirects(response, f'/lists/{correct_list.id}/',
-                             fetch_redirect_response=False
-                             )
-
-
 class ListAndItemModelsTest(TestCase):
     def test_saving_and_retrieving_items(self):
         list_ = List()
@@ -79,8 +49,8 @@ class ListAndItemModelsTest(TestCase):
         self.assertEqual(second_saved_item.list, list_)
 
     def test_cannot_save_empty_list_items(self):
-        list_=List.objects.create()
-        item=Item(list=list_,text='')
+        list_ = List.objects.create()
+        item = Item(list=list_, text='')
 
         with self.assertRaises(ValidationError):
             item.save()
