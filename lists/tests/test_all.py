@@ -25,6 +25,16 @@ class NewListTest(TestCase):
                              )
 
 
+def _create_two_lists() -> object:
+    correct_list = List.objects.create()
+    Item.objects.create(text='itemey 1', list=correct_list)
+    Item.objects.create(text='itemey 2', list=correct_list)
+    other_list = List.objects.create()
+    Item.objects.create(text='Other list item 1', list=other_list)
+    Item.objects.create(text='Other list item 2', list=other_list)
+    return correct_list, other_list
+
+
 class ListViewTest(TestCase):
     def test_uses_list_template(self):
         list_ = List.objects.create()
@@ -33,12 +43,7 @@ class ListViewTest(TestCase):
         self.assertTemplateUsed(response, 'list.html')
 
     def test_displays_only_list_items_for_that_list(self):
-        correct_list = List.objects.create()
-        Item.objects.create(text='itemey 1', list=correct_list)
-        Item.objects.create(text='itemey 2', list=correct_list)
-        other_list = List.objects.create()
-        Item.objects.create(text='Other list item 1', list=other_list)
-        Item.objects.create(text='Other list item 2', list=other_list)
+        correct_list, other_list = _create_two_lists()
 
         response = self.client.get(f'/lists/{correct_list.id}/')
 
@@ -73,12 +78,7 @@ class NewItemTest(TestCase):
         self.assertEqual(new_item.list, correct_list)
 
     def test_redirects_to_list_view(self):
-        correct_list = List.objects.create()
-        Item.objects.create(text='itemey 1', list=correct_list)
-        Item.objects.create(text='itemey 2', list=correct_list)
-        other_list = List.objects.create()
-        Item.objects.create(text='Other list item 1', list=other_list)
-        Item.objects.create(text='Other list item 2', list=other_list)
+        correct_list, other_list = _create_two_lists()
 
         response = self.client.post(
             f'/lists/{correct_list.id}/add_item',
