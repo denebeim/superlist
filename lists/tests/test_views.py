@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.utils.html import escape
 
+from lists.forms import ItemForm
 from lists.models import List, Item
 from lists.tests.test_models import _create_two_lists
 
@@ -91,10 +92,21 @@ class NewListTest(TestCase):
         response = self.client.post('/lists/new', data={'item_text': ''})
         self.assertEqual(List.objects.count(), 0)
         self.assertEqual(Item.objects.count(), 0)
+
     def test_validation_errors_end_up_on_lists_page(self):
-        list_=List.objects.create()
-        response=self.client.post(f'/lists/{list_.id}/',data={'item_text':''})
-        self.assertEqual(response.status_code,200)
-        self.assertTemplateUsed(response,'list.html')
+        list_ = List.objects.create()
+        response = self.client.post(f'/lists/{list_.id}/', data={'item_text': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'list.html')
         expected_error = escape("You can't have an empty list item")
         self.assertContains(response, expected_error)
+
+
+class HomePageTest(TestCase):
+    def test_uses_home_template(self):
+        response = self.client.get('/')
+        self.assertTemplateUsed(response, 'home.html')
+
+    def test_home_page_uses_item_form(self):
+        response = self.client.get('/')
+        self.assertIsInstance(response.context['form'], ItemForm)

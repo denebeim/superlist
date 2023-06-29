@@ -4,10 +4,6 @@ from lists.models import Item, List
 
 
 # Create your tests here.
-class HomePageTest(TestCase):
-    def test_uses_home_template(self):
-        response = self.client.get('/')
-        self.assertTemplateUsed(response, 'home.html')
 
 
 def _create_two_lists() -> object:
@@ -55,6 +51,7 @@ class ListAndItemModelsTest(TestCase):
         with self.assertRaises(ValidationError):
             item.save()
             item.full_clean()
+
     def test_get_absolute_url(self):
-        list_=List.objects.create()
-        self.assertEqual(list_.get_absolute_url(),f'/lists/{list_.id}/')
+        list_ = List.objects.create()
+        self.assertEqual(list_.get_absolute_url(), f'/lists/{list_.id}/')
