@@ -16,7 +16,7 @@ def view_list(request, list_id):
 
     if request.method == 'POST':
         try:
-            item = Item.objects.create(text=request.POST['item_text'], list=list_)
+            item = Item.objects.create(text=request.POST['text'], list=list_)
             item.full_clean()
             item.save()
             return redirect(list_)
@@ -29,12 +29,12 @@ def view_list(request, list_id):
                 item.delete()
             except:
                 pass
-    return render(request, 'list.html', {'list': list_, 'error': error})
+    return render(request, 'list.html', {'list': list_, 'error': error,'form': ItemForm()})
 
 
 def new_list(request):
     list_ = List.objects.create()
-    item = Item.objects.create(text=request.POST['item_text'], list=list_)
+    item = Item.objects.create(text=request.POST['text'], list=list_)
     try:
         item.full_clean()
     except ValidationError:
