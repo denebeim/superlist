@@ -1,5 +1,3 @@
-from unittest import skip
-
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 
@@ -12,7 +10,7 @@ class ItemValidationTest(FunctionalTest):
         # an empty list item. She hits Enter on the empty input box
 
         self.browser.get(self.live_server_url)
-        self.browser.find_element(By.ID,'id_new_item').send_keys(Keys.ENTER)
+        self.browser.find_element(By.ID, 'id_new_item').send_keys(Keys.ENTER)
 
         # The home page refreshes, and there is an error message saying
         # that list items cannot be blank
@@ -38,9 +36,8 @@ class ItemValidationTest(FunctionalTest):
         )
                       )
 
-    # And she can correct it by filling some text in
+        # And she can correct it by filling some text in
         self.browser.find_element(By.ID, 'id_new_item').send_keys('Make tea')
         self.browser.find_element(By.ID, 'id_new_item').send_keys(Keys.ENTER)
         self.wait_for(lambda: self.wait_for_row_in_list_table('1: Buy milk'))
         self.wait_for(lambda: self.wait_for_row_in_list_table('2: Make tea'))
-

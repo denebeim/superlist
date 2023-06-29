@@ -14,16 +14,20 @@ def view_list(request, list_id):
     error = None
 
     if request.method == 'POST':
-        if request.POST['item_text']=="":
+        try:
+            item = Item.objects.create(text=request.POST['item_text'], list=list_)
+            item.full_clean()
+            item.save()
+            return redirect(f'/lists/{list_.id}/')
+        except ValidationError:
             error = "You can't have an empty list item"
-        else:
+            # sqlite cannot disable blank text fields, other databases don't have
+            # this problem.
+            # TODO: add specific exception when we know it
             try:
-                item = Item.objects.create(text=request.POST['item_text'], list=list_)
-                item.full_clean()
-                item.save()
-                return redirect(f'/lists/{list_.id}/')
-            except ValidationError:
-                error = "You can't have an empty list item"
+                item.delete()
+            except:
+                pass
     return render(request, 'list.html', {'list': list_, 'error': error})
 
 
