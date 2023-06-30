@@ -32,7 +32,7 @@ class NewVisitorTest(FunctionalTest):
         # "1: Buy peacock feathers" as an item in a to-do list
         inputbox.send_keys(Keys.ENTER)
 
-        self.wait_for(lambda: self.wait_for_row_in_list_table(f"1: {row_text}"))
+        self.wait_for_row_in_list_table(f"1: {row_text}")
 
         # There is still a text box inviting her to add another item. She enters
         # "Use peacock feathers to make a fly" (Edith is very methodical)
@@ -42,8 +42,8 @@ class NewVisitorTest(FunctionalTest):
         inputbox.send_keys(Keys.ENTER)
 
         # The page updates again, and now shows both items on her list
-        self.wait_for(lambda: self.wait_for_row_in_list_table(f"1: {row_text}"))
-        self.wait_for(lambda: self.wait_for_row_in_list_table(f"2: {row_text2}"))
+        self.wait_for_row_in_list_table(f"1: {row_text}")
+        self.wait_for_row_in_list_table(f"2: {row_text2}")
 
         # Edith wonders whether the site will remember her list.
 
@@ -54,7 +54,7 @@ class NewVisitorTest(FunctionalTest):
         inputbox = self.get_item_input_box()
         inputbox.send_keys('Buy peacock feathers')
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for(lambda: self.wait_for_row_in_list_table('1: Buy peacock feathers'))
+        self.wait_for_row_in_list_table('1: Buy peacock feathers')
 
         # Then she sees that
         # the site has generated a unique URL for her -- there is some explanatory
@@ -80,7 +80,7 @@ class NewVisitorTest(FunctionalTest):
         inputbox = self.get_item_input_box()
         inputbox.send_keys('Buy Milk')
         inputbox.send_keys(Keys.ENTER)
-        self.wait_for(lambda: self.wait_for_row_in_list_table('1: Buy Milk'))
+        self.wait_for_row_in_list_table('1: Buy Milk')
 
         # Francis gets his own Unique URL
         francis_list_url = self.browser.current_url

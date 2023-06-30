@@ -33,7 +33,7 @@ class ItemValidationTest(FunctionalTest):
 
         # and she can submit it successfully
         self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for(lambda: self.wait_for_row_in_list_table('1: Buy milk'))
+        self.wait_for_row_in_list_table('1: Buy milk')
 
         # Perversely, she now decides to submit a second blank list item
         self.get_item_input_box().send_keys(Keys.ENTER)
@@ -55,8 +55,8 @@ class ItemValidationTest(FunctionalTest):
             )
         )
         self.get_item_input_box().send_keys(Keys.ENTER)
-        self.wait_for(lambda: self.wait_for_row_in_list_table('1: Buy milk'))
-        self.wait_for(lambda: self.wait_for_row_in_list_table('2: Make tea'))
+        self.wait_for_row_in_list_table('1: Buy milk')
+        self.wait_for_row_in_list_table('2: Make tea')
 
     def test_cannot_add_duplicate_items(self):
         # Edith goes to the home page and starts a new list5
@@ -70,7 +70,7 @@ class ItemValidationTest(FunctionalTest):
                 '#id_text:valid'
             )
         )
-        self.wait_for(lambda: self.wait_for_row_in_list_table(f'1: {BUY_WELLIES}'))
+        self.wait_for_row_in_list_table(f'1: {BUY_WELLIES}')
 
         # She accidentally tries to enter a duplicate item
         self.get_item_input_box().send_keys(BUY_WELLIES)
