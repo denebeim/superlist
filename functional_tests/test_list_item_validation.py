@@ -65,10 +65,7 @@ class ItemValidationTest(FunctionalTest):
         self.get_item_input_box().send_keys(BUY_WELLIES)
         self.get_item_input_box().send_keys(Keys.ENTER)
         self.wait_for(
-            lambda: self.browser.find_element(
-                By.CSS_SELECTOR,
-                '#id_text:valid'
-            )
+            lambda: self.browser.find_element(By.CSS_SELECTOR, '#id_text:valid')
         )
         self.wait_for_row_in_list_table(f'1: {BUY_WELLIES}')
 
@@ -79,7 +76,34 @@ class ItemValidationTest(FunctionalTest):
         # She sees a helpful error message
         self.wait_for(
             lambda: self.assertEqual(
-                self.browser.find_element(By.CSS_SELECTOR, '.has-error').text,
+                self.get_error_in_element().text,
                 DUPLICATE_ITEM_ERROR
             )
         )
+
+    def test_error_messages_are_cleared_on_input(self):
+        TEST = 'Banter too thick'
+        # Edith starts a list and causes a validation error:
+        self.browser.get(self.live_server_url)
+        self.get_item_input_box().send_keys(TEST)
+        self.get_item_input_box().send_keys(Keys.ENTER)
+        self.wait_for_row_in_list_table(f"1: {TEST}")
+        self.get_item_input_box().send_keys(TEST)
+        self.get_item_input_box().send_keys(Keys.ENTER)
+
+        self.wait_for(
+            lambda: self.assertTrue(self.get_error_in_element().is_displayed())
+            )
+
+        # She starts typing in the input box to clear the error
+        self.get_item_input_box().send_keys('a')
+
+        # She is pleased to see the error message disappears
+        self.wait_for(
+            lambda: self.assertFalse(
+                self.get_error_in_element().is_displayed()
+            )
+        )
+
+    def get_error_in_element(self):
+        return self.browser.find_element(By.CSS_SELECTOR, '.has-error')
