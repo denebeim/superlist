@@ -32,7 +32,10 @@ class FunctionalTest(StaticLiveServerTestCase):
                     raise e
                 time.sleep(.5)
 
-    def wait_for_row_in_list_table(self, row_text: str):
+    def wait_for_row_in_list_table(self, row_text):
+        self.wait_for(lambda: self.is_row_in_list_table(row_text))
+
+    def is_row_in_list_table(self, row_text: str):
         table = self.browser.find_element(By.ID, 'id_list_table')
         rows = table.find_elements(By.TAG_NAME, 'tr')
         self.assertIn(row_text, [row.text for row in rows])
