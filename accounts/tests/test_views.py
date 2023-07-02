@@ -70,7 +70,7 @@ class LoginViewTest(TestCase):
         self.client.get('/accounts/login?token=abc123')
         self.assertEqual(
             mock_auth.authenticate.call_args,
-            call(uid='abc123')
+            call(username='abc123')
         )
 
     def test_calls_auth_login_with_user_if_there_is_one(self, mock_auth):
