@@ -14,7 +14,7 @@ class ItemValidationTest(FunctionalTest):
         self.get_item_input_box().send_keys(Keys.ENTER)
 
         # The browser intercepts the request, and does not load the list page
-        wait_for(
+        self.wait_for(
             lambda: self.browser.find_element(
                 By.CSS_SELECTOR,
                 '#id_text:invalid'
@@ -24,7 +24,7 @@ class ItemValidationTest(FunctionalTest):
         # She starts typing some text for the new item and the error disappears
 
         self.get_item_input_box().send_keys('Buy milk')
-        wait_for(
+        self.wait_for(
             lambda: self.browser.find_element(
                 By.CSS_SELECTOR,
                 '#id_text:valid'
@@ -39,7 +39,7 @@ class ItemValidationTest(FunctionalTest):
         self.get_item_input_box().send_keys(Keys.ENTER)
 
         # She receives a similar warning on the list page
-        wait_for(
+        self.wait_for(
             lambda: self.browser.find_element(
                 By.CSS_SELECTOR,
                 '#id_text:invalid'
@@ -48,7 +48,7 @@ class ItemValidationTest(FunctionalTest):
 
         # And she can correct it by filling some text in
         self.get_item_input_box().send_keys('Make tea')
-        wait_for(
+        self.wait_for(
             lambda: self.browser.find_element(
                 By.CSS_SELECTOR,
                 '#id_text:valid'
@@ -64,7 +64,7 @@ class ItemValidationTest(FunctionalTest):
         self.browser.get(self.live_server_url)
         self.get_item_input_box().send_keys(BUY_WELLIES)
         self.get_item_input_box().send_keys(Keys.ENTER)
-        wait_for(
+        self.wait_for(
             lambda: self.browser.find_element(By.CSS_SELECTOR, '#id_text:valid')
         )
         self.wait_for_row_in_list_table(f'1: {BUY_WELLIES}')
@@ -74,7 +74,7 @@ class ItemValidationTest(FunctionalTest):
         self.get_item_input_box().send_keys(Keys.ENTER)
 
         # She sees a helpful error message
-        wait_for(
+        self.wait_for(
             lambda: self.assertEqual(
                 self.get_error_in_element().text,
                 DUPLICATE_ITEM_ERROR
@@ -91,7 +91,7 @@ class ItemValidationTest(FunctionalTest):
         self.get_item_input_box().send_keys(TEST)
         self.get_item_input_box().send_keys(Keys.ENTER)
 
-        wait_for(
+        self.wait_for(
             lambda: self.assertTrue(self.get_error_in_element().is_displayed())
             )
 
@@ -99,7 +99,7 @@ class ItemValidationTest(FunctionalTest):
         self.get_item_input_box().send_keys('a')
 
         # She is pleased to see the error message disappears
-        wait_for(
+        self.wait_for(
             lambda: self.assertFalse(
                 self.get_error_in_element().is_displayed()
             )
