@@ -4,7 +4,6 @@ from selenium.webdriver.common.keys import Keys
 import re
 from .base import FunctionalTest
 
-TEST_EMAIL = 'edith@example.com'
 SUBJECT = 'Your login link for Superlists'
 
 
@@ -14,7 +13,7 @@ class LoginTest(FunctionalTest):
         # the navbar for the first time
         # It's telling her to enter her email address, so she does
         self.browser.get(self.live_server_url)
-        self.browser.find_element(By.NAME, 'email').send_keys(TEST_EMAIL)
+        self.browser.find_element(By.NAME, 'email').send_keys(self.WILLING_TEST_SUBJECT)
         self.browser.find_element(By.NAME, 'email').send_keys(Keys.ENTER)
 
         # a message appears telling her an email has been sent
@@ -27,7 +26,7 @@ class LoginTest(FunctionalTest):
 
         # She checks her email and finds a message
         email = mail.outbox[0]
-        self.assertIn(TEST_EMAIL, email.to)
+        self.assertIn(self.WILLING_TEST_SUBJECT, email.to)
         self.assertEqual(email.subject, SUBJECT)
 
         # It has a url link in it
@@ -42,16 +41,10 @@ class LoginTest(FunctionalTest):
         self.browser.get(url)
 
         # she is logged in!
-        self.wait_for(
-            lambda: self.browser.find_element(By.LINK_TEXT, 'Log out')
-        )
-        navbar = self.browser.find_element(By.CSS_SELECTOR, '.navbar')
-        self.assertIn(TEST_EMAIL, navbar.text)
+        self.wait_to_be_logged_in(email=self.WILLING_TEST_SUBJECT)
 
         # Now she logs out
         self.browser.find_element(By.LINK_TEXT, 'Log out').click()
 
         # She is logged out
-        self.wait_for(lambda: self.browser.find_element(By.NAME, 'email'))
-        navbar = self.browser.find_element(By.CSS_SELECTOR, '.navbar')
-        self.assertNotIn(TEST_EMAIL, navbar.text)
+        self.wait_to_be_logged_out(email=self.WILLING_TEST_SUBJECT)

@@ -12,6 +12,8 @@ MAX_WAIT = 10
 
 
 class FunctionalTest(StaticLiveServerTestCase):
+    WILLING_TEST_SUBJECT = 'edith@example.com'
+
     def setUp(self):
         self.browser = webdriver.Firefox()
         staging_server = os.environ.get('STAGING_SERVER')
@@ -41,3 +43,13 @@ class FunctionalTest(StaticLiveServerTestCase):
 
     def get_item_input_box(self):
         return self.browser.find_element(By.ID, 'id_text')
+
+    def wait_to_be_logged_in(self, email):
+        self.wait_for(lambda: self.browser.find_element(By.LINK_TEXT, 'Log out'))
+        navbar = self.browser.find_element(By.CSS_SELECTOR, '.navbar')
+        self.assertIn(email, navbar.text)
+
+    def wait_to_be_logged_out(self, email):
+        self.wait_for(lambda: self.browser.find_element(By.NAME, 'email'))
+        navbar = self.browser.find_element(By.CSS_SELECTOR, '.navbar')
+        self.assertNotIn(email, navbar.text)
