@@ -2,7 +2,7 @@ from django.core import mail
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import re
-from .base import FunctionalTest
+from .base import FunctionalTest, wait
 
 SUBJECT = 'Your login link for Superlists'
 
