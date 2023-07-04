@@ -17,10 +17,10 @@ class LoginTest(FunctionalTest):
         # the navbar for the first time
         # It's telling her to enter her email address, so she does
         if self.staging_server:
-            test_email=os.getenv('TEST_EMAIL')
+            test_email = os.getenv('TEST_EMAIL')
         else:
-            test_email='edith@example.com'
-            
+            test_email = 'edith@example.com'
+
         self.browser.get(self.live_server_url)
         self.browser.find_element(By.NAME, 'email').send_keys(test_email)
         self.browser.find_element(By.NAME, 'email').send_keys(Keys.ENTER)
@@ -34,7 +34,7 @@ class LoginTest(FunctionalTest):
         )
 
         # She checks her email and finds a message
-        body = self.wait_for_email(test_email,SUBJECT)
+        body = self.wait_for_email(test_email, SUBJECT)
 
         # It has a url link in it
         self.assertIn('Use this link to log in', body)
@@ -64,8 +64,10 @@ class LoginTest(FunctionalTest):
             return email.body
 
         email_id = None
+        time.sleep(1)  # wait for some race condition
         start = time.time()
         inbox = poplib.POP3_SSL('pop.gmail.com')
+        # inbox.set_debuglevel(2)
         try:
             inbox.user(test_email)
             p = os.getenv('TEST_EMAIL_SECRET')
@@ -74,8 +76,8 @@ class LoginTest(FunctionalTest):
                 # get 10 latest messages
                 count, _ = inbox.stat()
                 for i in reversed(range(max(1, count - 10), count + 1)):
-                    print('getting msg',i)
-                    _,lines,__=inbox.retr(i)
+                    print('getting msg', i)
+                    _, lines, __ = inbox.retr(i)
                     lines = [l.decode('utf8') for l in lines]
                     if f'Subject: {subject}' in lines:
                         email_id = i

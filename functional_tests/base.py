@@ -36,6 +36,9 @@ class FunctionalTest(StaticLiveServerTestCase):
     def tearDown(self):
         self.browser.quit()
 
+    def get_item_input_box(self):
+        return self.browser.find_element(By.ID, 'id_text')
+
     @wait
     def wait_for(self, fn):
         return fn()
@@ -49,8 +52,6 @@ class FunctionalTest(StaticLiveServerTestCase):
         rows = table.find_elements(By.TAG_NAME, 'tr')
         self.assertIn(row_text, [row.text for row in rows])
 
-    def get_item_input_box(self):
-        return self.browser.find_element(By.ID, 'id_text')
 
     @wait
     def wait_to_be_logged_in(self, email):
