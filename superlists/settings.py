@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'lists',
     'accounts',
+    'functional_tests',
 ]
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'denebeim@gmail.com'

@@ -67,7 +67,7 @@ class LoginTest(FunctionalTest):
         time.sleep(1)  # wait for some race condition
         start = time.time()
         inbox = poplib.POP3_SSL('pop.gmail.com')
-        # inbox.set_debuglevel(2)
+        inbox.set_debuglevel(2)
         try:
             inbox.user(test_email)
             p = os.getenv('TEST_EMAIL_SECRET')
