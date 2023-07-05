@@ -1,14 +1,22 @@
 import sys
 from pprint import pprint
 
+from django.conf import settings
+from django.contrib.sessions.backends.db import SessionStore
 from django.shortcuts import render, redirect
 
+from accounts.models import User
 from lists.forms import ItemForm, ExistingListItemForm
 from lists.models import List
 
 
 # Create your views here.
 def home_page(request):
+    if settings.SESSION_COOKIE_NAME in request.COOKIES.keys():
+        session=SessionStore()
+        email=session.get(request.COOKIES[settings.SESSION_COOKIE_NAME])
+        user=User.objects.get(email=email)
+        user.is_authenticated = True
     return render(request, 'home.html', {'form': ItemForm()})
 
 
