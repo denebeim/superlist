@@ -22,7 +22,7 @@ def create_pre_authenticated_session(email):
     # token=Token.objects.create(email=email)
     user = User.objects.create(email=email)
     # auth.authenticate(username=token)
-    print(f'email: {user.email} auth: {user.is_authenticated}')
+    #print(f'email: {user.email} auth: {user.is_authenticated}') bad, corrupts the
     # user.save()
     session = SessionStore()
     session[SESSION_KEY] = user.pk
