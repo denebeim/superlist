@@ -12,11 +12,11 @@ from lists.models import List
 
 # Create your views here.
 def home_page(request):
-    if settings.SESSION_COOKIE_NAME in request.COOKIES.keys():
-        session=SessionStore()
-        email=session.get(request.COOKIES[settings.SESSION_COOKIE_NAME])
-        user=User.objects.get(email=email)
-        user.is_authenticated = True
+    # if settings.SESSION_COOKIE_NAME in request.COOKIES.keys():
+        # session=SessionStore()
+        # session_key=session.get(request.COOKIES[settings.SESSION_COOKIE_NAME])
+        # user=User.objects.get(pk=email)
+        # user.is_authenticated = True
     return render(request, 'home.html', {'form': ItemForm()})
 
 
