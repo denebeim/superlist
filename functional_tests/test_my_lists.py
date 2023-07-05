@@ -13,7 +13,7 @@ class MyListsTest(FunctionalTest):
         if self.staging_server:
             session_key = create_session_on_server(
                 host=self.staging_server, email=email
-            )
+            ).decode("utf-8").strip()
         else:
             session_key = create_pre_authenticated_session(email)
 

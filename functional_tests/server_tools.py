@@ -1,3 +1,6 @@
+import os
+import subprocess
+
 from fabric.api import run
 from fabric.context_managers import settings, shell_env
 
@@ -7,6 +10,9 @@ def _get_manage_dot_py(host):
 
 
 def reset_database(host):
+    if 'localhost' in host:
+        subprocess.check_output('./manage.py flush --noinput', shell=True)
+        return
     manage_dot_py = _get_manage_dot_py(host)
     with settings(host_string=f'denebeim@{host}'):
         run(f'{manage_dot_py} flush --noinput')
@@ -18,6 +24,11 @@ def _get_server_env_vars(host):
 
 
 def create_session_on_server(host, email):
+    if 'localhost' in host:
+        session_key = subprocess.check_output(
+            f'./manage.py create_session {email}', shell=True
+        )
+        return session_key
     manage_dot_py = _get_manage_dot_py(host)
     with settings(host_string=f'denebeim@{host}'):
         env_vars = _get_server_env_vars(host)
