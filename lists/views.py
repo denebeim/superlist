@@ -9,8 +9,6 @@ from lists.models import List
 
 # Create your views here.
 def home_page(request):
-    pprint(request.session.items(),stream=sys.stderr)
-    print(f'{str(ItemForm().data)}')
     return render(request, 'home.html', {'form': ItemForm()})
 
 
